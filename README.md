@@ -13,49 +13,43 @@ sudo chmod 777 *.sh
 sudo chmod -R 777 database/scripts/
 
 
-composer -v
-
-composer global require "laravel/installer" 
-
-cd site
-composer create-project --prefer-dist laravel/laravel:^10.0 laravel10
-
-cd ..
 
 sudo ./start.sh 
 sudo ./database/scripts/initBDD.sh
 
 
+
+# construire le projet :
+
 cd site
-php artisan migrate
 
+# Mettre à jour les dépendances PHP
+composer update
 
-composer require reliese/laravel --dev
+# Pour créer le fichier .env de Laravel, copiez le fichier d'exemple fourni par Laravel :
+cp .env.example .env
 
-php artisan vendor:publish --tag=reliese-models
+# Générer la clé d'application Laravel
+php artisan key:generate
+
+# Générer la clé pour les jetons JWT
+php artisan jwt:secret
+
+# Vider les caches Laravel (recommandé après installation ou modif config)
 php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
+php artisan event:clear
 
-php artisan code:models
+# Générer les caches optimisés (recommandé pour la production)
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan event:cache
 
 
-composer dump-autoload
 
-php artisan tinker
-
-Bateau::all()
-
-composer require laravel/breeze
-
-php artisan breeze:install
-
-node -v
-npm -v
-
-npm install
-npm run build
-
-pour le .env :
-APP_URL=https://${CODESPACE_NAME}-8000.githubpreview.dev
 
 ## Arborescence du dépôt
 

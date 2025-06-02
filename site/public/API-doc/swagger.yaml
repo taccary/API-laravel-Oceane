@@ -15,7 +15,7 @@ info:
     3. **Effectuez des requêtes** : Une fois autorisé, Swagger UI inclura automatiquement le jeton Bearer dans l'en-tête Authorization pour les requêtes vers les endpoints sécurisés.
 
 servers:
-  - url: http://127.0.0.1:8001/api #remplacer par l'url de votre serveur
+  - url: http://127.0.0.1:8000/api #remplacer par l'url de votre serveur
     description: Serveur de developpement
 
 components:
