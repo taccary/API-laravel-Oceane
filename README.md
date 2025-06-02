@@ -35,6 +35,9 @@ php artisan key:generate
 # Générer la clé pour les jetons JWT
 php artisan jwt:secret
 
+# Créer le lien symbolique pour le stockage des fichiers
+php artisan storage:link
+
 # Vider les caches Laravel (recommandé après installation ou modif config)
 php artisan config:clear
 php artisan cache:clear
