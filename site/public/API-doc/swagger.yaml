@@ -1,0 +1,794 @@
+openapi: 3.0.0
+info:
+  title: API Oceane Documentation
+  version: 1.0.0
+  description: |
+    Cette documentation permet de connaitre et tester les routes de l'API.
+
+    ## Authentification
+
+    Cette API utilise une authentification par jeton JWT (JSON Web Token). Pour accéder aux endpoints sécurisés, vous devez d'abord vous authentifier et obtenir un jeton JWT. Ensuite, vous pourrez utiliser ce jeton pour effectuer des requêtes authentifiées.
+    ### Authentification avec Swagger UI
+    
+    1. **Obtenez un jeton JWT** : Utilisez l'endpoint `/login` pour obtenir un jeton JWT en fournissant votre email et votre mot de passe.
+    2. **Autorisez Swagger UI** : Cliquez sur le bouton "Authorize" en haut à droite de Swagger UI. Entrez votre jeton JWT `Bearer ` (par exemple, `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`).
+    3. **Effectuez des requêtes** : Une fois autorisé, Swagger UI inclura automatiquement le jeton Bearer dans l'en-tête Authorization pour les requêtes vers les endpoints sécurisés.
+
+servers:
+  - url: http://127.0.0.1:8001/api #remplacer par l'url de votre serveur
+    description: Serveur de developpement
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /login:
+    post:
+      summary: Authentification
+      description: |
+        Utilisez cet endpoint pour vous authentifier et obtenir un jeton JWT.
+        Vous devez fournir votre email et mot de passe dans le corps de la requête.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "test@test.test"
+                password:
+                  type: string
+                  example: "testtest"
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Identifiants invalides"
+        '422':
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Le mot de passe est requis"
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                        example: "Le mot de passe est requis"
+  /me:
+    get:
+      summary: Récupérer les informations de l'utilisateur connecté
+      description: |
+        Utilisez cet endpoint pour récupérer les informations de l'utilisateur connecté.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: "test"
+                  email:
+                    type: string
+                    example: "test@test.test"
+                  email_verified_at:
+                    type: string
+                    nullable: true
+                    example: null
+                  photo:
+                    type: string
+                    nullable: true
+                    example: null
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: "2025-05-15T13:58:46.000000Z"
+                  updated_at:
+                    type: string
+                    format: date-time
+                    example: "2025-05-15T13:58:46.000000Z"
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthenticated."
+        '422':
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Le mot de passe est requis"
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                        example: "Le mot de passe est requis"
+  /logout:
+    post:
+      summary: Déconnexion
+      description: |
+        Utilisez cet endpoint pour vous déconnecter. Cela invalidera le jeton JWT.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Déconnexion réussie"
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '422':
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Le mot de passe est requis"
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                        example: "Le mot de passe est requis"
+
+  /bateaux:
+    get:
+      summary: Récupérer la liste des bateaux
+      description: |
+        Utilisez cet endpoint pour récupérer la liste des bateaux.
+        Cette route est accessible sans authentification.
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    nom:
+                      type: string
+                      example: "Oh mon bateau !"
+                    description:
+                      type: string
+                      example: "C'est le plus beau des bateaux..."
+        '404':
+          description: Aucun bateau trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Aucun bateau trouvé"
+    post:
+      summary: Créer un bateau
+      description: |
+        Utilisez cet endpoint pour créer un nouveau bateau.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                nom:
+                  type: string
+                  example: "Oh mon bateau !"
+                description:
+                  type: string
+                  example: "C'est le plus beau des bateaux..."
+      responses:
+        '201':
+          description: Bateau créé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nom:
+                    type: string
+                    example: "Oh mon bateau !"
+                  description:
+                    type: string
+                    example: "C'est le plus beau des bateaux..."
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '422':
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Le mot de passe est requis"
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                        example: "Le mot de passe est requis"
+  /bateaux/{id}:
+    get:
+      summary: Récupérer les détails d'un bateau
+      description: |
+        Utilisez cet endpoint pour récupérer les détails d'un bateau spécifique en fournissant son ID.
+        Cette route est accessible sans authentification.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID du bateau
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    id:
+                      type: integer
+                      example: 1
+                    nom:
+                      type: string
+                      example: "Oh mon bateau !"
+                    description:
+                      type: string
+                      example: "C'est le plus beau des bateaux..."
+        '404':
+          description: Bateau non trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Bateau non trouvé"
+
+    put: 
+      summary: Mettre à jour un bateau
+      description: |
+        Utilisez cet endpoint pour mettre à jour un bateau existant en fournissant son ID.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID du bateau
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom:
+                  type: string
+                  example: "Oh mon bateau !"
+                description:
+                  type: string
+                  example: "C'est le plus beau des bateaux..."
+      responses:
+        '200':
+          description: Bateau mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nom:
+                    type: string
+                    example: "Oh mon bateau !"
+                  description:
+                    type: string
+                    example: "C'est le plus beau des bateaux..."
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '422':
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Le mot de passe est requis"
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                        example: "Le mot de passe est requis"
+    delete:
+      summary: Supprimer un bateau
+      description: |
+        Utilisez cet endpoint pour supprimer un bateau en fournissant son ID.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID du bateau
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Bateau supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Bateau supprimé avec succès"
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '422':
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Le mot de passe est requis"
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                        example: "Le mot de passe est requis"
+  /test-put:
+    put:
+      summary: dfggfdsdfdsgg
+      description: |
+        fgxggxgfxdfghxdfdg
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "PUT OK" 
+        '404':
+          description: Aucun bateau trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Aucun bateau trouvé" 
+  /ports:
+    get:
+      summary: Récupérer la liste des ports
+      description: |
+        Utilisez cet endpoint pour récupérer la liste des ports.
+        Cette route est accessible sans authentification.
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nom_court:
+                      type: string
+                      example: "Le Palais"
+                    nom:
+                      type: string
+                      example: "Gare maritime de Le Palais"
+                    description:
+                      type: string
+                      example: "La gare maritime de Le Palais est ouverte toute l’année de 08h30 à 12h15 et de 14h00 à 18h00."
+                    adresse:
+                      type: string
+                      example: "Quai Bonnelle 56360 Le Palais"
+                    photo:
+                      type: string
+                      example: "le-palais.jpg"
+                    camera:
+                      type: string
+                      example: "https://pv.viewsurf.com/id/848/a/media/c/4416?i=Njk0ODp1bmRlZmluZWQ"
+        '404':
+          description: Aucun port trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Aucun port trouvé"
+    post : 
+      summary: Créer un port
+      description: |
+        Utilisez cet endpoint pour créer un nouveau port.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom_court:
+                  type: string
+                  example: "Le Palais"
+                nom:
+                  type: string
+                  example: "Gare maritime de Le Palais"
+                description:
+                  type: string
+                  example: "La gare maritime de Le Palais est ouverte toute l’année de 08h30 à 12h15 et de 14h00 à 18h00."
+                adresse:
+                  type: string
+                  example: "Quai Bonnelle 56360 Le Palais"    
+                photo:
+                  type: string
+                  example: "le-palais.jpg"
+                camera:
+                  type: string
+                  example: "https://pv.viewsurf.com/id/848/a/media/c/4416?i=Njk0ODp1bmRlZmluZWQ"   
+      responses:
+        '201':
+          description: Port créé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nom_court:
+                    type: string
+                    example: "Le Palais"
+                  nom:
+                    type: string
+                    example: "Gare maritime de Le Palais"
+                  description:
+                    type: string
+                    example: "La gare maritime de Le Palais est ouverte toute l’année de 08h30 à 12h15 et de 14h00 à 18h00."
+                  adresse:
+                    type: string
+                    example: "Quai Bonnelle 56360 Le Palais"
+                  photo:
+                    type: string
+                    example: "le-palais.jpg"
+                  camera:
+                    type: string
+                    example: "https://pv.viewsurf.com/id/848/a/media/c/4416?i=Njk0ODp1bmRlZmluZWQ"
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '422':  
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Le mot de passe est requis"
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                        example: "Le mot de passe est requis"
+
+  /ports/{nom_court}:
+    get:
+      summary: Récupérer les détails d'un port
+      description: |
+        Utilisez cet endpoint pour récupérer les détails d'un port spécifique en fournissant son nom court.
+        Cette route est accessible sans authentification.
+      parameters:
+        - name: nom_court
+          in: path
+          required: true
+          description: Nom court du port
+          schema:
+            type: string
+            example: "Le Palais"
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nom_court:
+                    type: string
+                    example: "Le Palais"
+                  nom:
+                    type: string
+                    example: "Gare maritime de Le Palais"
+                  description:
+                    type: string
+                    example: "La gare maritime de Le Palais est ouverte toute l’année de 08h30 à 12h15 et de 14h00 à 18h00."
+                  adresse:
+                    type: string
+                    example: "Quai Bonnelle 56360 Le Palais"
+                  photo:
+                    type: string
+                    example: "le-palais.jpg"
+                  camera:
+                    type: string
+                    example: "https://pv.viewsurf.com/id/848/a/media/c/4416?i=Njk0ODp1bmRlZmluZWQ"
+        '404':
+          description: Port non trouvé
+          content:
+            message:
+              type: string
+              example: "Port non trouvé"
+    put:
+      summary: Mettre à jour un port
+      description: |
+        Utilisez cet endpoint pour mettre à jour un port existant en fournissant son nom court.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: nom_court
+          in: path
+          required: true
+          description: Nom court du port
+          schema:
+            type: string
+            example: "Le Palais"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom:
+                  type: string
+                  example: "Gare maritime de Le Palais"
+                description:
+                  type: string
+                  example: "La gare maritime de Le Palais est ouverte toute l’année de 08h30 à 12h15 et de 14h00 à 18h00."
+                adresse:
+                  type: string
+                  example: "Quai Bonnelle 56360 Le Palais"     
+                photo:
+                  type: string
+                  example: "le-palais.jpg"
+                camera:
+                  type: string
+                  example: "https://pv.viewsurf.com/id/848/a/media/c/4416?i=Njk0ODp1bmRlZmluZWQ" 
+      responses:
+        '200':
+          description: Port mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nom_court:
+                    type: string
+                    example: "Le Palais"
+                  nom:
+                    type: string
+                    example: "Gare maritime de Le Palais"
+                  description:
+                    type: string
+                    example: "La gare maritime de Le Palais est ouverte toute l’année de 08h30 à 12h15 et de 14h00 à 18h00."
+                  adresse:
+                    type: string
+                    example: "Quai Bonnelle 56360 Le Palais"
+                  photo:
+                    type: string
+                    example: "le-palais.jpg"
+                  camera:
+                    type: string
+                    example: "https://pv.viewsurf.com/id/848/a/media/c/4416?i=Njk0ODp1bmRlZmluZWQ"
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '404':
+          description: Port non trouvé
+          content:
+            message:
+              type: string
+              example: "Port non trouvé"          
+    delete:
+      summary: Supprimer un port
+      description: |
+        Utilisez cet endpoint pour supprimer un port en fournissant son nom court.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: nom_court
+          in: path
+          required: true
+          description: Nom court du port
+          schema:
+            type: string
+            example: "Le Palais"
+      responses:
+        '200':
+          description: Port supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Port supprimé avec succès"
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '404':
+          description: Port non trouvé
+          content:
+            message:
+              type: string
+              example: "Port non trouvé dans la base de données"            
+        
+
