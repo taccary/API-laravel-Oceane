@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class PortController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Renvoie la liste de tous les ports.
      */
     public function index()
     {
@@ -19,7 +19,7 @@ class PortController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Renvoie les détails d'un port spécifique.
      */
     public function show(String $nom_court)
     {
@@ -28,7 +28,7 @@ class PortController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Enregistre un nouveau port.
      */
     public function store(Request $request)
     {
@@ -57,12 +57,11 @@ class PortController extends Controller
 
         $port -> save();
         return response() -> json($port, 201);
-
     }
 
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour les informations d'un port spécifique.
      */
     public function update(Request $request, string $nom_court)
     {
@@ -92,13 +91,12 @@ class PortController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprime un port spécifique.
      */
     public function destroy(string $nom_court)
     {
         $lePort = Port::findOrFail($nom_court);
         $lePort -> delete();
         return response() -> json($nom_court + " à bien été supprimer ", 204);
-
     }
 }
