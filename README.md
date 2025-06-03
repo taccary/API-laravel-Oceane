@@ -33,7 +33,7 @@ Ce dépôt est configuré pour fonctionner avec les Codespaces de GitHub et les 
      ```bash
      ./start.sh
      ```
-   Ce script démarre le serveur PHP intégré sur le port 8000, démarre maraidb et crée la base métier depuis le script renseigné (mettre à jour en fonction du projet).
+   Ce script démarre le serveur PHP intégré sur le port 8000, démarre mariadb et crée la base métier depuis le script renseigné (mettre à jour en fonction du projet).
 
 2. **Ouvrir le service php dans un navigateur** :
    - Accédez à `http://localhost:8000` pour voir la page d'accueil de l'API.
@@ -130,9 +130,11 @@ Vous pouvez maintenant consommer cette API sans être connecté à votre compte 
 
 ## Documentation de l'API
 
-Cette API est documentée avec Swagger. Cette interface de documentation est stockée dans le dossier public/API-docs du site.
+Cette API est documentée avec [Swagger](https://fr.wikipedia.org/wiki/Swagger_(logiciel)). Cette interface de documentation interactive est stockée dans le dossier public/API-doc du site. Elle est parametrée par le fichier `swagger.yaml` à la racine du dossier.
 
-Pour accéder à la documentation en ligne, il faut ouvrir dans le navigateur la page API-docs/swagger-ui
+Pour accéder à la documentation en ligne, il faut ouvrir dans le navigateur la page API-doc/swagger-ui/index.html
+
+> **important** : Pour faire fonctionner la doc, il faut modifier l'url d'accès dans le fichier yaml avec celle de votre codespace en cours d'execution.
 
 ## Utilisation de XDebug
 
