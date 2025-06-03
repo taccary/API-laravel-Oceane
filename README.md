@@ -123,9 +123,16 @@ php artisan event:cache
 ```
 
 ### Exposer l'API publiquement
+Pour exposer publiquement cette API, aller dans l'onglet "Ports" du terminal.
+Faire un clic droit sur le service web (qui tourne sur le port 8080). Changer la visibilité du port en public.
+Vous pouvez maintenant consommer cette API sans être connecté à votre compte Github. 
+> **Attention** : le codespace s'arrete régulierement quand il est inactif
 
+## Documentation de l'API
 
+Cette API est documentée avec Swagger. Cette interface de documentation est stockée dans le dossier public/API-docs du site.
 
+Pour accéder à la documentation en ligne, il faut ouvrir dans le navigateur la page API-docs/swagger-ui
 
 ## Utilisation de XDebug
 
