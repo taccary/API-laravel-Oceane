@@ -19,6 +19,22 @@ $credentials = $request->only('email', 'password');
  return response()->json(['error' => 'Unauthorized'], 401); 
  } 
 return response()->json(['token' => $token]); 
+} 
+
+ public function register(Request $request) 
+ {
+ $this->validate($request, [
+ 'name' => 'required|string|max:255',
+ 'email' => 'required|string|email|max:255|unique:users',
+ 'password' => 'required|string|min:6|confirmed',
+ ]);
+ $user = User::create([
+ 'name' => $request->name,
+ 'email' => $request->email,
+ 'password' => Hash::make($request->password),
+ ]);
+ $token = auth('api')->login($user);
+ return response()->json(['token' => $token, 'user' => $user], 201);
 
 } 
 

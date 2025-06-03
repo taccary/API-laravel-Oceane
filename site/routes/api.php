@@ -46,6 +46,7 @@ Route::put('/test-put', function () {
 });
 
 Route::post('/login', [ApiAuthController::class, 'login']); 
+Route::post('/register', [ApiAuthController::class, 'register']);
 Route::middleware('auth:api')->get('/me', [ApiAuthController::class, 'me']); 
 Route::middleware('auth:api')->post('/logout', [ApiAuthController::class, 'logout']); 
 
