@@ -1,58 +1,10 @@
-# Tp API Laravel 10
+# Exemple d'API en Laravel sécurisée avec JWT (contexte de la Compagnie Océane)
+(TP AP SIO2 SLAM) 
+Ce dépot contient une API Laravel utilisant une authentification avec des jeton JWT. Elle est prévue pour être exposée publiquement et consommée dans d'autres applications construites en TP.
 
-blablablba projet
+## Environnement technique
 
-
-
-
-
-
-
-si nécessaire, changer les droits sur les scripts du dépot :
-sudo chmod 777 *.sh
-sudo chmod -R 777 database/scripts/
-
-
-
-sudo ./start.sh 
-sudo ./database/scripts/initBDD.sh
-
-
-
-# construire le projet :
-
-cd site
-
-# Mettre à jour les dépendances PHP
-composer update
-
-# Pour créer le fichier .env de Laravel, copiez le fichier d'exemple fourni par Laravel :
-cp .env.example .env
-
-# Générer la clé d'application Laravel
-php artisan key:generate
-
-# Générer la clé pour les jetons JWT
-php artisan jwt:secret
-
-# Créer le lien symbolique pour le stockage des fichiers
-php artisan storage:link
-
-# Vider les caches Laravel (recommandé après installation ou modif config)
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
-php artisan event:clear
-
-# Générer les caches optimisés (recommandé pour la production)
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan event:cache
-
-
-
+Ce dépot est configuré pour être ouvert dans un Codespace construit depuis une image spécifique Debian-LAMP-PHP. Le Dockerfile complexe installe les dépendances, outils et services nécessaires au TP et des scripts Bash pour organiser le démarrage des services et les interactions avec la BDD.
 
 ## Arborescence du dépôt
 
@@ -62,7 +14,7 @@ Voici l'arborescence du dépôt et le rôle des différents composants. Les fich
 |  ├── devcontainer.json # Configuration du Dev Container pour VS Code
 |  └── Dockerfile # Dockerfile pour construire l'image du Dev Container  dans mariadb 
 ├── .github/ # config pour les alertes de dépendances (sécurité)
-├── .vscode/ # config pour XDebug et parametres de vscode
+├── .vscode/ # config pour XDebug et paramètres de vscode
 ├── database # scripts pour la BDD
 |  ├── scripts # contient 3 scripts bash : 1 pour initialiser la BDD métier (avec ses utilisateurs système), 1 pour sauver la bdd métier du codespace et 1 pour la recharger à partir du .sql présent dans le dépot
 |  └── sources-sql # fichiers SQL pour contruire la BDD métier, ses utilisateurs et ses données 
@@ -70,18 +22,9 @@ Voici l'arborescence du dépôt et le rôle des différents composants. Les fich
 ├── start.sh # Script de lancement pour démarrer le service mariadb et les instances web du site et de phpMyAdmin.
 └── stop.sh # Script pour arreter le service mariadb et les instances web du site et de phpMyAdmin.
 
+## Configuration, lancement de l'application et persistance des données
 
-## Configuration du Codespace et lancement de l'application
-
-Ce dépôt est configuré pour fonctionner avec les Codespaces de GitHub et les Dev Containers de Visual Studio Code. Suivez les étapes ci-dessous pour configurer votre environnement de développement.
-
-
-### Utilisation avec GitHub Codespaces
-1. **Créez un codespace pour ouvrir ce dépot** :
-   - Cliquez sur le bouton "Code" dans GitHub et sélectionnez "Open with Codespaces".
-   - Si vous n'avez pas encore de Codespace, cliquez sur "New Codespace".
-
-   Le Codespace ainsi créé contient toutes les configurations nécessaires pour démarrer le développement.
+Ce dépôt est configuré pour fonctionner avec les Codespaces de GitHub et les Dev Containers de Visual Studio Code. Suivez les étapes ci-dessous pour lancer les services.
 
 ### Serveur php et service mariadb (avec la base métier)
 
@@ -121,6 +64,69 @@ Ce dépôt est configuré pour fonctionner avec les Codespaces de GitHub et les 
       ./database/scripts/reloadBDD.sh 
       ```
 
+> ℹ️ **Infos techniques : Problèmes de droits**
+> si les scripts ne s'executent pas, c'est qu'il faut mettre à jour les droits dans le dépot :
+>       ``` sudo chmod 777 *.sh ```
+>       ``` sudo chmod -R 777 database/scripts/> ```
+
+### Construire le projet Laravel :
+
+Une fois l'environnement préparé, il faut parametrer et mettre à jour le projet Laravel en installant les élémenst qui ne sont pas dans le dépot (installation des dépendances, config bdd, secrets, liens symboliques, caches)
+
+1. Aller dans le dossier site
+```bash
+cd site
+```
+
+2. Mettre à jour les dépendances PHP
+```bash
+composer update
+```
+
+3. Créer le fichier .env de Laravel en copiant le fichier d'exemple fourni par Laravel :
+```bash
+cp .env.example .env
+```
+
+4. Modifier les infos de connexion à la BDD dans le .env
+
+5. Générer la clé d'application Laravel
+```bash
+php artisan key:generate
+```
+
+6. Générer la clé pour les jetons JWT
+```bash
+php artisan jwt:secret
+```
+
+7. Créer le lien symbolique pour le stockage des fichiers
+```bash
+php artisan storage:link
+```
+
+8. Vider les caches Laravel (recommandé après installation ou modif config)
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
+php artisan event:clear
+```
+
+9. Générer les caches optimisés (recommandé pour la production)
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan event:cache
+```
+
+### Exposer l'API publiquement
+
+
+
+
 ## Utilisation de XDebug
 
 Ce Codespace contient XDebug pour le débogage PHP. 
@@ -134,6 +140,4 @@ Ce Codespace contient XDebug pour le débogage PHP.
    - Une fois le point d'arrêt atteint, essayez de survoler les variables, d'examiner les variables locales, etc.
 
 [Tuto Grafikart : Xdebug, l'exécution pas à pas ](https://grafikart.fr/tutoriels/xdebug-breakpoint-834)
-
-
 
