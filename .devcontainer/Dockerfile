@@ -35,7 +35,12 @@ RUN \
     # Donne les droits à www-data sur ce dossier
     && chown -R www-data:www-data /usr/src/phpmyadmin/tmp \
     # Donne tous les droits sur ce dossier (lecture/écriture/exécution)
-    && chmod 777 /usr/src/phpmyadmin/tmp
+    && chmod 777 /usr/src/phpmyadmin/tmp \
+    # Crée un super utilisateur MariaDB
+    && service mariadb start \
+    && mysql -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin_password';" \
+    && mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;"  \
+    && mysql -e "FLUSH PRIVILEGES;"
 
 EXPOSE 3306 8080
 
