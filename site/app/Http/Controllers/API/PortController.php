@@ -74,19 +74,19 @@ class PortController extends Controller
         ]);
 
         $port = Port::find($nom_court);
-        $port -> nom = $request -> input('nom');
-        $port -> description = $request -> input('description');
-        $port -> adresse = $request -> input('adresse');
+        $port->nom = $request -> input('nom');
+        $port->description = $request -> input('description');
+        $port->adresse = $request -> input('adresse');
 
         if($request->filled('photo')) {
-            $port -> image = $request -> input('photo'); 
+            $port->photo = $request -> input('photo'); 
         }
 
         if ($request->filled('camera')) {
             $port->camera = $request->input('camera');
         }
 
-        $port -> save();
+        $port->save();
         return response() -> json($port, 200);
     }
 
