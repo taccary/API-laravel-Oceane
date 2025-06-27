@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\BateauxController;
 use App\Http\Controllers\API\PortController;
 use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\API\SecteurController;
 use Firebase\JWT\JWT; 
 use Firebase\JWT\Key; 
 
@@ -39,6 +40,14 @@ Route::get('/ports/{nom_court}', [PortController::class, 'show']);
 Route::post('/ports', [PortController::class, 'store']);
 Route::put('/ports/{nom_court}', [PortController::class, 'update']);
 Route::delete('/ports/{nom_court}', [PortController::class, 'destroy']);
+
+
+// Routes Secteur
+Route::get('/secteurs', [SecteurController::class, 'index']);
+Route::get('/secteurs/{id}', [SecteurController::class, 'show']);
+Route::post('/secteurs', [SecteurController::class, 'store']);
+Route::put('/secteurs/{id}', [SecteurController::class, 'update']);
+Route::delete('/secteurs/{id}', [SecteurController::class, 'destroy']);
 
 
 Route::put('/test-put', function () {
@@ -105,4 +114,4 @@ Route::get('/verify-jwt', function (Request $request) {
 
     } 
 
-}); 
+});

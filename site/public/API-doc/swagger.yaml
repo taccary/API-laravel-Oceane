@@ -860,6 +860,275 @@ paths:
           content:
             message:
               type: string
-              example: "Port non trouvé dans la base de données"            
-        
+              example: "Port non trouvé dans la base de données"
+  /secteurs:
+    get:
+      summary: Récupérer la liste des secteurs
+      description: |
+        Utilisez cet endpoint pour récupérer la liste des secteurs.
+        Cette route est accessible sans authentification.
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    nom:
+                      type: string
+                      example: "Secteur Nord"
+                    photo:
+                      type: string
+                      example: "nord.jpg"
+                    description:
+                      type: string
+                      example: "Secteur desservant la partie nord."
+                    url:
+                      type: string
+                      example: "https://oceane.fr/secteur/nord"
+    post:
+      summary: Créer un secteur
+      description: |
+        Utilisez cet endpoint pour créer un nouveau secteur.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom:
+                  type: string
+                  example: "Secteur Nord"
+                photo:
+                  type: string
+                  example: "nord.jpg"
+                description:
+                  type: string
+                  example: "Secteur desservant la partie nord."
+                url:
+                  type: string
+                  example: "https://oceane.fr/secteur/nord"
+      responses:
+        '201':
+          description: Secteur créé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nom:
+                    type: string
+                    example: "Secteur Nord"
+                  photo:
+                    type: string
+                    example: "nord.jpg"
+                  description:
+                    type: string
+                    example: "Secteur desservant la partie nord."
+                  url:
+                    type: string
+                    example: "https://oceane.fr/secteur/nord"
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '422':
+          description: Erreur de validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Le champ nom est requis."
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                        example: "Le champ nom est requis."
+  /secteurs/{id}:
+    get:
+      summary: Récupérer les détails d'un secteur
+      description: |
+        Utilisez cet endpoint pour récupérer les détails d'un secteur spécifique en fournissant son ID.
+        Cette route est accessible sans authentification.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID du secteur
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nom:
+                    type: string
+                    example: "Secteur Nord"
+                  photo:
+                    type: string
+                    example: "nord.jpg"
+                  description:
+                    type: string
+                    example: "Secteur desservant la partie nord."
+                  url:
+                    type: string
+                    example: "https://oceane.fr/secteur/nord"
+        '404':
+          description: Secteur non trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Secteur non trouvé"
+    put:
+      summary: Mettre à jour un secteur
+      description: |
+        Utilisez cet endpoint pour mettre à jour un secteur existant en fournissant son ID.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID du secteur
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom:
+                  type: string
+                  example: "Secteur Nord"
+                photo:
+                  type: string
+                  example: "nord.jpg"
+                description:
+                  type: string
+                  example: "Secteur desservant la partie nord."
+                url:
+                  type: string
+                  example: "https://oceane.fr/secteur/nord"
+      responses:
+        '200':
+          description: Secteur mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  nom:
+                    type: string
+                    example: "Secteur Nord"
+                  photo:
+                    type: string
+                    example: "nord.jpg"
+                  description:
+                    type: string
+                    example: "Secteur desservant la partie nord."
+                  url:
+                    type: string
+                    example: "https://oceane.fr/secteur/nord"
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '404':
+          description: Secteur non trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Secteur non trouvé"
+    delete:
+      summary: Supprimer un secteur
+      description: |
+        Utilisez cet endpoint pour supprimer un secteur en fournissant son ID.
+        Cette route nécessite une authentification par jeton JWT.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID du secteur
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '204':
+          description: Secteur supprimé avec succès
+        '401':
+          description: Non autorisé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Non autorisé"
+        '404':
+          description: Secteur non trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Secteur non trouvé"
+
 
